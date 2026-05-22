@@ -1,0 +1,37 @@
+services:
+  claude-manager:
+    build:
+      context: .
+      dockerfile: docker/manager/Dockerfile
+    container_name: claude-manager
+    ports:
+      - "${MANAGER_PORT:-3456}:3456"
+      - "3457:3457"
+    volumes:
+      # Backend source (live reload)
+      - ./service/be:/app
+      # Frontend static files
+      - ./service/fe:/app/public
+      # Host claude binary
+      - ${CLAUDE_BINARY}:/usr/local/bin/claude:ro
+      # Claude config + credentials
+      - ${CLAUDE_CONFIG}:/root/.claude
+      # Claude main config file
+      - ${HOME}/.claude.json:/root/.claude.json
+      # Host project folders
+      - ${PROJECTS_ROOT}:/projects
+      # Persistent data (saved instance configs)
+      - ./data:/app/data
+      # Whisper model cache (so it doesn't re-download)
+      - whisper-cache:/root/.cache
+      # TLS certs for HTTPS (needed for mobile mic)
+      - ./certs:/app/certs:ro
+    environment:
+      - NODE_ENV=development
+      - PROJECTS_ROOT=/projects
+      - HOST_PROJECTS_ROOT=${PROJECTS_ROOT}
+      - PATH=/root/.local/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
+    restart: unless-stopped
+
+volumes:
+  whisper-cache:

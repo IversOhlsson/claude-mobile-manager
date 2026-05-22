@@ -1,0 +1,30 @@
+{
+  "name": "claude-code-manager",
+  "version": "0.0.1",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "tsx watch src/server.ts",
+    "build": "tsc",
+    "start": "node dist/server.js"
+  },
+  "dependencies": {
+    "@anthropic-ai/claude-agent-sdk": "^0.2.97",
+    "chokidar": "^5.0.0",
+    "express": "^5.1.0",
+    "http-proxy": "^1.18.1",
+    "node-pty": "^1.0.0",
+    "openai": "^6.34.0",
+    "uuid": "^11.1.0",
+    "ws": "^8.18.0"
+  },
+  "devDependencies": {
+    "@types/express": "^5.0.2",
+    "@types/http-proxy": "^1.17.16",
+    "@types/node": "^22.15.2",
+    "@types/uuid": "^10.0.0",
+    "@types/ws": "^8.18.1",
+    "tsx": "^4.19.4",
+    "typescript": "^5.8.3"
+  }
+}

@@ -1,0 +1,24 @@
+node_modules/
+dist/
+.env
+.env.local
+*.log
+
+# Backend artifacts
+service/be/node_modules/
+service/be/dist/
+
+# Persisted state (instance configs, etc.)
+data/*
+!data/.gitkeep
+service/be/data/
+
+# TLS material — never commit real certs
+certs/*.pem
+certs/*.key
+service/be/certs/
+
+# Editor / OS
+.DS_Store
+.vscode/
+.idea/

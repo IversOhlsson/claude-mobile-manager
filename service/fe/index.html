@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="Claude">
+  <meta name="theme-color" content="#0a0e14">
+  <link rel="manifest" href="/manifest.json">
+  <title>Claude Code Manager</title>
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@xterm/xterm@5.5.0/css/xterm.min.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+</head>
+<body>
+  <div id="app">
+
+    <!-- ══════ VIEW: Instance List ══════ -->
+    <div id="view-list" class="view active">
+      <header class="top-bar">
+        <h1>Claude Manager</h1>
+        <button id="btn-new-instance" class="btn btn-primary btn-sm">+ New</button>
+      </header>
+      <div id="instance-cards"></div>
+      <div id="empty-state">
+        <div class="empty-icon">&gt;_</div>
+        <p>No instances yet</p>
+        <button class="btn btn-primary" onclick="document.getElementById('btn-new-instance').click()">Create Instance</button>
+      </div>
+    </div>
+
+    <!-- ══════ VIEW: Active Instance ══════ -->
+    <div id="view-instance" class="view">
+      <header class="top-bar instance-bar">
+        <button id="btn-back" class="btn-icon" title="Back">&larr;</button>
+        <div class="instance-bar-info">
+          <span id="bar-name" class="bar-name"></span>
+          <span id="bar-status" class="bar-status-dot"></span>
+        </div>
+        <div class="instance-bar-actions">
+          <button id="bar-preview" class="btn-icon" title="Web Preview">&#x1f310;</button>
+          <button id="bar-kill" class="btn-icon btn-icon-danger" title="Stop">&times;</button>
+        </div>
+      </header>
+      <div id="panels-wrapper" class="panels-wrapper">
+        <div id="pty-container" class="panel hidden"></div>
+        <div id="sdk-container" class="panel hidden"></div>
+        <div id="preview-container" class="panel hidden">
+          <div class="preview-toolbar">
+            <div class="preview-url-bar">
+              <span class="preview-protocol">:</span>
+              <input type="number" id="preview-port-input" class="preview-port-input" placeholder="3000" min="1" max="65535">
+              <span class="preview-path">/</span>
+            </div>
+            <div class="preview-actions">
+              <button id="preview-refresh-btn" class="btn-icon" title="Refresh">&#x21bb;</button>
+              <button id="preview-close-btn" class="btn-icon" title="Close preview">&times;</button>
+            </div>
+          </div>
+          <iframe id="preview-iframe" class="preview-iframe" sandbox="allow-scripts allow-same-origin allow-forms allow-popups"></iframe>
+        </div>
+      </div>
+      <div id="voice-bar" class="hidden">
+        <div id="voice-row-wrapper" class="hidden">
+          <div class="voice-row">
+            <input type="text" id="voice-text-input" placeholder="Tap to speak..." autocomplete="off" autocapitalize="off">
+            <button id="voice-text-clear" class="voice-row-btn">X</button>
+            <button id="voice-text-send" class="voice-row-btn voice-row-btn-primary">SEND</button>
+          </div>
+        </div>
+        <button id="voice-speak-btn" class="pty-action pty-action-primary">PRESS TO SPEAK</button>
+        <div id="pty-actions-main">
+          <button class="pty-action pty-action-primary" data-key="enter">ENTER</button>
+          <button class="pty-action" data-key="esc">ESC</button>
+        </div>
+        <div id="pty-actions">
+          <button class="pty-action" data-key="up">&#x25B2;</button>
+          <button class="pty-action" data-key="down">&#x25BC;</button>
+          <button class="pty-action" data-key="tab">TAB</button>
+          <button class="pty-action pty-action-danger" data-key="ctrl-c">STOP</button>
+          <button class="pty-action" data-key="clear">CLEAR</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- ══════ MODAL: New Instance ══════ -->
+    <div id="modal-overlay" class="hidden">
+      <div id="modal">
+        <h2>New Instance</h2>
+        <form id="form-new-instance">
+          <label>
+            Working Directory
+            <input type="text" id="input-cwd" placeholder="/home/user/projects/my-project" required>
+          </label>
+          <label>
+            Name (optional)
+            <input type="text" id="input-name" placeholder="my-project">
+          </label>
+          <label>
+            Mode
+            <select id="select-mode">
+              <option value="pty" selected>Terminal (PTY)</option>
+              <option value="sdk">Structured Chat (SDK)</option>
+            </select>
+          </label>
+          <div class="modal-actions">
+            <button type="button" id="btn-cancel" class="btn">Cancel</button>
+            <button type="submit" class="btn btn-primary">Create</button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/@xterm/xterm@5.5.0/lib/xterm.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@xterm/addon-fit@0.10.0/lib/addon-fit.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@xterm/addon-web-links@0.11.0/lib/addon-web-links.min.js"></script>
+  <script src="js/app.js"></script>
+  <script src="js/dashboard.js"></script>
+  <script src="js/voice.js"></script>
+  <script src="js/pty-panel.js"></script>
+  <script src="js/terminal-panel.js"></script>
+  <script src="js/preview-panel.js"></script>
+</body>
+</html>
