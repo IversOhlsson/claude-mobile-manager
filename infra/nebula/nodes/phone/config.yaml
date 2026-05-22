@@ -1,0 +1,37 @@
+pki:
+  ca: /etc/nebula/ca.crt
+  cert: /etc/nebula/phone.crt
+  key: /etc/nebula/phone.key
+
+static_host_map:
+  "10.0.0.254": ["158.179.200.104:4242"]
+
+lighthouse:
+  am_lighthouse: false
+  interval: 60
+  hosts:
+    - "10.0.0.254"
+
+listen:
+  host: 0.0.0.0
+  port: 0
+
+punchy:
+  punch: true
+  respond: true
+
+firewall:
+  conntrack:
+    tcp_timeout: 12m
+    udp_timeout: 3m
+    default_timeout: 10m
+
+  outbound:
+    - port: any
+      proto: any
+      group: machines
+
+  inbound:
+    - port: any
+      proto: any
+      group: machines

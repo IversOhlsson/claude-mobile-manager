@@ -1,0 +1,37 @@
+pki:
+  ca: /etc/nebula/ca.crt
+  cert: /etc/nebula/lighthouse.crt
+  key: /etc/nebula/lighthouse.key
+
+static_host_map: {}
+
+lighthouse:
+  am_lighthouse: true
+  interval: 60
+
+listen:
+  host: 0.0.0.0
+  port: 4242
+
+punchy:
+  punch: true
+
+tun:
+  dev: nebula1
+  drop_local_broadcast: false
+  drop_multicast: false
+
+logging:
+  level: info
+  format: text
+
+# Lighthouse accepts NO application traffic — only Nebula protocol (NAT traversal)
+firewall:
+  conntrack:
+    tcp_timeout: 12m
+    udp_timeout: 3m
+    default_timeout: 10m
+
+  outbound: []
+
+  inbound: []

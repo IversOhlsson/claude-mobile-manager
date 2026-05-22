@@ -1,0 +1,38 @@
+#cloud-config
+
+package_update: true
+package_upgrade: true
+
+packages:
+  - curl
+  - unattended-upgrades
+
+write_files:
+  - path: /etc/systemd/system/nebula.service
+    content: |
+      [Unit]
+      Description=Nebula Lighthouse
+      After=network.target
+
+      [Service]
+      Type=simple
+      ExecStart=/usr/local/bin/nebula -config /etc/nebula/config.yaml
+      Restart=always
+      RestartSec=5
+
+      [Install]
+      WantedBy=multi-user.target
+
+runcmd:
+  # Install Nebula (detect arch)
+  - |
+    ARCH=$(uname -m)
+    if [ "$ARCH" = "aarch64" ]; then NEBULA_ARCH="arm64"; else NEBULA_ARCH="amd64"; fi
+    curl -fsSL "https://github.com/slackhq/nebula/releases/latest/download/nebula-linux-${NEBULA_ARCH}.tar.gz" -o /tmp/nebula.tar.gz
+  - tar -xzf /tmp/nebula.tar.gz -C /usr/local/bin/ nebula nebula-cert
+  - chmod +x /usr/local/bin/nebula /usr/local/bin/nebula-cert
+  - mkdir -p /etc/nebula
+  # Enable auto-updates
+  - systemctl enable unattended-upgrades
+  # Nebula config + certs must be copied manually after first boot
+  # Then: systemctl enable nebula && systemctl start nebula

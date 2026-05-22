@@ -1,0 +1,15 @@
+# Nebula PKI — never commit
+nebula/ca/*.key
+nebula/ca/*.crt
+nebula/nodes/**/*.key
+nebula/nodes/**/*.crt
+nebula/nodes/**/*-qr.png
+nebula/nodes/**/mobile-config.yaml
+
+# Terraform — state & secrets
+terraform/terraform.tfvars
+terraform/terraform.tfstate
+terraform/terraform.tfstate.*
+terraform/.terraform/
+terraform/.terraform.tfstate.lock.info
+terraform/crash.log
